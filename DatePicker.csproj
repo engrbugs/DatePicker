@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <Title>Date Picker</Title>
+    <PackageIcon>icons8-calendar-11-ios-16-filled-96.png</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="icons8-calendar-11-ios-16-filled-96.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="icons8-calendar-11-ios-16-filled-96.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </Resource>
+  </ItemGroup>
+
+</Project>

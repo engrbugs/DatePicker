@@ -1,0 +1,17 @@
+﻿<Window x:Class="DatePicker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DatePicker"
+        mc:Ignorable="d"
+        Title="Date Picker" Height="450" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" KeyDown="OnKeyDownHandler" Icon="/icons8-calendar-11-ios-16-filled-96.png">
+    <Grid>
+        
+        <Viewbox Stretch="Uniform" Height="434" VerticalAlignment="Top" KeyDown="OnKeyDownHandler">
+            <Calendar Name="calendar" Width="187" Height="167" SelectionMode="MultipleRange" KeyDown="OnKeyDownHandler" PreviewKeyDown="OnKeyDownHandler" PreviewMouseUp="calendar_PreviewMouseUp"/>
+        </Viewbox>
+        <TextBox Name="textbox" Text="What's your name?" VerticalAlignment="Top" Margin="10,342,10,0" FontSize="16" KeyDown="OnKeyDownHandler"/>
+        <Button Name="button" Content="OK" Margin="160,364,160,0" Height="28" Click="button_Click" d:IsLocked="True" KeyDown="OnKeyDownHandler" IsDefault="true"/>
+    </Grid>
+</Window>
