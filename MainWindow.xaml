@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DatePicker"
         mc:Ignorable="d"
-        Title="Date Picker" Height="450" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" KeyDown="OnKeyDownHandler" Icon="/icons8-calendar-11-ios-16-filled-96.png">
+        Title="Date Picker" Height="450" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" KeyDown="OnKeyDownHandler" Icon="/icons8-calendar-11-ios-16-filled-96.png" Loaded="Window_Loaded">
     <Grid>
         
         <Viewbox Stretch="Uniform" Height="434" VerticalAlignment="Top" KeyDown="OnKeyDownHandler">

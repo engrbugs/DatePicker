@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 
 
 namespace DatePicker
@@ -31,8 +33,44 @@ namespace DatePicker
         {
             InitializeComponent();
             textbox.Text = iniFIle.Read(iniFilePath, "Time Section", "Text1");
-        }
-        private void button_Click(object sender, RoutedEventArgs e)
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\BUGS\\Github\\DatePicker\\clicks.mdf;Integrated Security=True";
+
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                // Open the connection
+                connection.Open();
+
+                string query = "INSERT INTO Counts (NumberDates) VALUES (3);";
+                
+                SqlCommand command = new SqlCommand(query, connection);
+                command.ExecuteNonQuery();
+
+                query = "SELECT SCOPE_IDENTITY() as 'lastid'";
+                command = new SqlCommand(query, connection);
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    MessageBox.Show(reader["lastid"].ToString());
+                }
+                
+
+                
+
+                /* to read from sql data
+                string query = "SELECT * FROM dbo.Users;";
+                SqlCommand command = new SqlCommand(query, connection);
+
+                // Execute the query and get the result set
+                SqlDataReader reader = command.ExecuteReader();
+                */
+
+                // Close the connection
+                connection.Close();
+            }
+
+}
+private void button_Click(object sender, RoutedEventArgs e)
         {
             List<DateTime> dates = calendar.SelectedDates.ToList<DateTime>();
             if (SORT_SELECTED_DATES) {dates.Sort();}
@@ -62,6 +100,10 @@ namespace DatePicker
             {
                 Mouse.Capture(null);
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
         }
     }
 }
