@@ -112,12 +112,35 @@ namespace DatePicker
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             calendar.BlackoutDates.AddDatesInPast();
+
+            DateTime startDate = DateTime.Now.AddDays(-30);
+            DateTime endDate = DateTime.Now.AddDays(30);
+
+            for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+            {
+                if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    calendar.BlackoutDates.Add(new CalendarDateRange(date));
+                }
+            }
         }
 
         private void calendar_DisplayDateChanged(object sender, CalendarDateChangedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine(e.RemovedDate);
-
+            calendar.BlackoutDates.AddDatesInPast();
+            //System.Diagnostics.Debug.WriteLine(calendar.DisplayDate);
+            //calendar.BlackoutDates.Add(calendar.DisplayDate);
+            DateTime startDate = calendar.DisplayDate.AddDays(-30);
+            DateTime endDate = calendar.DisplayDate.AddDays(+50);
+            calendar.BlackoutDates.Clear();
+            for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+            {
+                if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    calendar.BlackoutDates.Add(new CalendarDateRange(date));
+                }
+            }
+            
         }
     }
 }
