@@ -9,7 +9,7 @@
     <Grid>
         
         <Viewbox Stretch="Uniform" Height="434" VerticalAlignment="Top" KeyDown="OnKeyDownHandler">
-            <Calendar Name="calendar" Width="187" Height="167" SelectionMode="MultipleRange" KeyDown="OnKeyDownHandler" PreviewKeyDown="OnKeyDownHandler" PreviewMouseUp="calendar_PreviewMouseUp"/>
+            <Calendar Name="calendar" Width="187" Height="167" SelectionMode="MultipleRange" KeyDown="OnKeyDownHandler" PreviewKeyDown="OnKeyDownHandler" PreviewMouseUp="calendar_PreviewMouseUp" DisplayDateChanged="calendar_DisplayDateChanged"/>
         </Viewbox>
         <TextBox Name="textbox" Text="What's your name?" VerticalAlignment="Top" Margin="10,342,10,0" FontSize="16" KeyDown="OnKeyDownHandler"/>
         <Button Name="button" Content="OK" Margin="160,364,160,0" Height="28" Click="button_Click" d:IsLocked="True" KeyDown="OnKeyDownHandler" IsDefault="true"/>

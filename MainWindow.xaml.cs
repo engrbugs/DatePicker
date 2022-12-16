@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -25,7 +28,6 @@ namespace DatePicker
     /// </summary>
     public partial class MainWindow : Window
     {
-        public const bool SORT_SELECTED_DATES = true;
         public const string INI_FILENAME = "time.ini";
 
         public string iniFilePath = System.IO.Directory.GetCurrentDirectory() + INI_FILENAME;
@@ -33,50 +35,55 @@ namespace DatePicker
         {
             InitializeComponent();
             textbox.Text = iniFIle.Read(iniFilePath, "Time Section", "Text1");
-            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\BUGS\\Github\\DatePicker\\clicks.mdf;Integrated Security=True";
+        }
 
+        private void input_Clicks_SQL(List<DateTime> sortedDates)
+        {
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\BUGS\\Github\\DatePicker\\clicks.mdf;Integrated Security=True";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 // Open the connection
                 connection.Open();
 
-                string query = "INSERT INTO Counts (NumberDates) VALUES (3);";
-                
+                string query = $"INSERT INTO Counts (NumberDates) VALUES ({sortedDates.Count()});";
+
                 SqlCommand command = new SqlCommand(query, connection);
                 command.ExecuteNonQuery();
 
-                query = "SELECT SCOPE_IDENTITY() as 'lastid'";
+                query = "SELECT SCOPE_IDENTITY() as lastClickId";
                 command = new SqlCommand(query, connection);
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+                int lastClickId = 0;
+                using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    MessageBox.Show(reader["lastid"].ToString());
+                    reader.Read();
+                    lastClickId = int.Parse(reader["lastClickId"].ToString());
                 }
-                
+                foreach (DateTime dt in sortedDates)
+                {
+                    TimeSpan duration = dt.Subtract(DateTime.Now.Date);
 
-                
-
-                /* to read from sql data
-                string query = "SELECT * FROM dbo.Users;";
-                SqlCommand command = new SqlCommand(query, connection);
-
-                // Execute the query and get the result set
-                SqlDataReader reader = command.ExecuteReader();
-                */
+                    query = $"INSERT INTO Clicks (ClickId, Distance, WeekOfDay) VALUES "
+                            + $"({lastClickId},"
+                            + $"{duration.TotalDays},"
+                            + $"{(int)dt.DayOfWeek})";
+                    System.Diagnostics.Debug.WriteLine(query);
+                    command = new SqlCommand(query, connection);
+                    command.ExecuteNonQuery();
+                }
 
                 // Close the connection
                 connection.Close();
             }
-
-}
-private void button_Click(object sender, RoutedEventArgs e)
+        }
+        private void button_Click(object sender, RoutedEventArgs e)
         {
             List<DateTime> dates = calendar.SelectedDates.ToList<DateTime>();
-            if (SORT_SELECTED_DATES) {dates.Sort();}
+            dates.Sort();
             List<string> dateStrings = dates.Select(date => date.ToString("d")).ToList();
             string toClipboard = String.Join(" " + textbox.Text + Environment.NewLine, dateStrings) + 
                 " " + textbox.Text;
+            input_Clicks_SQL(dates);
             save_inifile(textbox.Text);
             Clipboard.SetText(toClipboard);
             this.Close();
@@ -96,7 +103,7 @@ private void button_Click(object sender, RoutedEventArgs e)
         private void calendar_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             base.OnPreviewMouseUp(e);
-            if (Mouse.Captured is Calendar || Mouse.Captured is System.Windows.Controls.Primitives.CalendarItem)
+            if (Mouse.Captured is System.Windows.Controls.Calendar || Mouse.Captured is System.Windows.Controls.Primitives.CalendarItem)
             {
                 Mouse.Capture(null);
             }
@@ -104,6 +111,13 @@ private void button_Click(object sender, RoutedEventArgs e)
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            calendar.BlackoutDates.AddDatesInPast();
+        }
+
+        private void calendar_DisplayDateChanged(object sender, CalendarDateChangedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine(e.RemovedDate);
+
         }
     }
 }
