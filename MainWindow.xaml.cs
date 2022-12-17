@@ -80,12 +80,18 @@ namespace DatePicker
         {
             List<DateTime> dates = calendar.SelectedDates.ToList<DateTime>();
             dates.Sort();
+
             List<string> dateStrings = dates.Select(date => date.ToString("d")).ToList();
+
             string toClipboard = String.Join(" " + textbox.Text + Environment.NewLine, dateStrings) + 
                 " " + textbox.Text;
+
             input_Clicks_SQL(dates);
+
             save_inifile(textbox.Text);
+
             Clipboard.SetText(toClipboard);
+
             this.Close();
         }
 
@@ -129,7 +135,6 @@ namespace DatePicker
         {
             calendar.BlackoutDates.AddDatesInPast();
             //System.Diagnostics.Debug.WriteLine(calendar.DisplayDate);
-            //calendar.BlackoutDates.Add(calendar.DisplayDate);
             DateTime startDate = calendar.DisplayDate.AddDays(-30);
             DateTime endDate = calendar.DisplayDate.AddDays(+50);
             calendar.BlackoutDates.Clear();

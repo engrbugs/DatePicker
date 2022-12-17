@@ -7,10 +7,15 @@
     <UseWPF>true</UseWPF>
     <Title>Date Picker</Title>
     <PackageIcon>icons8-calendar-11-ios-16-filled-96.png</PackageIcon>
+    <ApplicationIcon>icons8-calendar-11-ios-16-filled-96.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="icons8-calendar-11-ios-16-filled-96.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="icons8-calendar-11-ios-16-filled-96.ico" />
   </ItemGroup>
 
   <ItemGroup>
